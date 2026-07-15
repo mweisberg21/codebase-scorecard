@@ -36,7 +36,7 @@ The `scores` object below shows one row's shape; the real input must repeat it f
     {"label": "Test files", "value": 240}
   ],
   "scores": {
-    "TypeScript Safety": {
+    "Type Safety": {
       "maintainability": 4,
       "modularity": 3,
       "predictability": 4
@@ -61,7 +61,7 @@ Include all ten exact subcategory keys from `references/rubric.md`. Each row con
       "Predictability": "High"
     },
     "subcategories": {
-      "TypeScript Safety": "High"
+      "Type Safety": "High"
     }
   },
   "pillar_reasons": {
@@ -79,7 +79,7 @@ Include all ten exact subcategory keys from `references/rubric.md`. Each row con
     }
   ],
   "categories": {
-    "TypeScript Safety": {
+    "Type Safety": {
       "strength": "Strongest direct evidence.",
       "risk": "Most important counter-evidence.",
       "rationale": "Why the evidence maps to the three scores.",
@@ -132,7 +132,7 @@ Include all ten exact subcategory keys from `references/rubric.md`. Each row con
 
 Use plain strings for evidence so the HTML remains portable. Put exact `path:line` locations at the start of each evidence string. Allowed verification results are `pass`, `fail`, and `skipped`; allowed finding severities are `critical`, `high`, `medium`, and `low`.
 
-`improvements` is required and must contain at least one standards-backed recommendation. Every improvement requires non-empty `title`, `why`, `evidence`, `target_state`, `first_slice`, `completion_test`, `standards`, and `verification`. Start every improvement evidence string with an exact `path:line` or the native check that exposed the gap. Each standards entry requires `name`, an `http` or `https` `url`, and `fit`; include `section` or version and `authority` whenever available. The generator rejects incomplete improvements and unsafe standard URLs.
+`improvements` may be an empty list only when no recommendation passes the quality gate in [`improvement-standards.md`](improvement-standards.md); the generator then renders an explicit "no improvements met the bar" state. Do not manufacture a recommendation to avoid the empty state. Every included improvement requires non-empty `title`, `why`, `evidence`, `target_state`, `first_slice`, `completion_test`, `standards`, and `verification`. Start every improvement evidence string with an exact `path:line` or the native check that exposed the gap. Each standards entry requires `name`, an `http` or `https` `url`, and `fit`; include `section` or version and `authority` whenever available. The generator rejects incomplete improvements and unsafe standard URLs.
 
 ## Output check
 

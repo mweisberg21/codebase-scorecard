@@ -36,11 +36,11 @@ Use this map to find the right primary sources. It is a routing guide, not a req
 - Use repository architecture contracts and official framework guidance for concrete boundaries and supported patterns.
 - Do not infer that a fashionable architecture is required. Recommend a boundary change only when dependency or change-coupling evidence shows the current boundary is costly or unsafe.
 
-### TypeScript Safety
+### Type Safety
 
-- Use the official **TypeScript TSConfig reference** for `strict` and individual compiler checks.
-- Match advice to the installed TypeScript version and current configuration.
-- Treat type assertions, `any`, unsafe parsing, generated types, and external boundaries according to their actual risk. Do not recommend flags that the codebase already enforces.
+- Use the official documentation for the detected type system: the **TypeScript TSConfig reference**, **mypy**/**pyright** configuration docs, or the language's own compiler and vet tooling documentation.
+- Match advice to the installed checker version and current configuration.
+- Treat type assertions, escape hatches (`any`, `Any`, `interface{}`), unsafe parsing, generated types, and external boundaries according to their actual risk. Do not recommend flags that the codebase already enforces.
 
 ### Security
 
@@ -48,10 +48,10 @@ Use this map to find the right primary sources. It is a routing guide, not a req
 - Use **NIST SP 800-218 Secure Software Development Framework (SSDF)** for secure-development process improvements and recurring root-cause prevention.
 - Use official platform security guidance for framework-specific controls. Never claim that a static audit proves security.
 
-### Database/Supabase
+### Data & Persistence
 
-- Use official **Supabase** documentation for RLS, client roles, service keys, authentication, and platform behavior.
-- Use the current official **PostgreSQL** documentation for constraints, transactions, indexes, privileges, and row security.
+- Use the official documentation for the detected data platform — for example **Supabase** for RLS, client roles, service keys, and authentication, or the equivalent vendor documentation for another platform or ORM.
+- Use the current official documentation for the detected database engine (for example **PostgreSQL**) for constraints, transactions, indexes, privileges, and row security.
 - Prefer database-enforced invariants for data integrity, but respect deliberate application-authorization boundaries and explain bypass behavior such as service-role access.
 
 ### Error Handling
@@ -72,9 +72,10 @@ Use this map to find the right primary sources. It is a routing guide, not a req
 - Use NIST SSDF for supply-chain and secure-build process recommendations where applicable.
 - Recommend reproducible commands and version pinning only when current evidence shows drift or non-determinism.
 
-### Frontend Performance
+### Client Performance
 
-- Use the official **web.dev Core Web Vitals** definitions for LCP, INP, and CLS, including the 75th-percentile evaluation model.
+- For web clients, use the official **web.dev Core Web Vitals** definitions for LCP, INP, and CLS, including the 75th-percentile evaluation model.
+- For mobile or desktop clients, use the platform's official performance guidance.
 - Use official framework performance guidance for the detected version.
 - Do not assign a runtime performance score from bundle heuristics alone. Recommend measurement when field or lab data is absent.
 

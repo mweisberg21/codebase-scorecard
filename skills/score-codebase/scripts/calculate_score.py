@@ -12,14 +12,14 @@ from typing import TextIO
 
 
 CATEGORIES = (
-    "TypeScript Safety",
+    "Type Safety",
     "Architecture",
     "Security",
-    "Database/Supabase",
+    "Data & Persistence",
     "Error Handling",
     "Code Consistency",
     "Build & Tooling",
-    "Frontend Performance",
+    "Client Performance",
     "Structural (God Files)",
     "Testing & CI",
 )
@@ -31,8 +31,9 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description=__doc__,
         epilog=(
-            'Input: {"TypeScript Safety": {"maintainability": 4, '
+            'Input: {"Type Safety": {"maintainability": 4, '
             '"modularity": 3, "predictability": 4}, ...}. '
+            "Cells are whole numbers from 0 to 5. "
             'Use null or "N/A" for all three cells of an inapplicable category.'
         ),
     )
@@ -54,10 +55,10 @@ def validated_score(value: object, location: str) -> float | None:
     if is_na(value):
         return None
     if isinstance(value, bool) or not isinstance(value, (int, float)):
-        raise ValueError(f"{location} must be a number from 0 to 5 or N/A")
+        raise ValueError(f"{location} must be a whole number from 0 to 5 or N/A")
     score = float(value)
-    if not 0 <= score <= 5:
-        raise ValueError(f"{location} must be between 0 and 5")
+    if not 0 <= score <= 5 or not score.is_integer():
+        raise ValueError(f"{location} must be a whole number between 0 and 5")
     return score
 
 

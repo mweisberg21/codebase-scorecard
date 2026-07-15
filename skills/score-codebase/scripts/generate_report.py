@@ -258,7 +258,10 @@ def render_categories(
 def render_improvements(value: Any) -> str:
     improvements = [item for item in items(value) if isinstance(item, dict)]
     if not improvements:
-        raise ValueError("improvements must contain at least one recommendation")
+        return (
+            '<div class="empty">No standards-backed improvement met the quality gate. '
+            "See the category evidence and limitations for what was assessed.</div>"
+        )
     rendered = []
     for index, item in enumerate(improvements, 1):
         context = f"improvement {index}"
