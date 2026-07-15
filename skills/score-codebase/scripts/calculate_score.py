@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate a 30-cell scorecard and calculate equal-weight rollups."""
+"""Validate a 33-cell scorecard and calculate equal-weight rollups."""
 
 from __future__ import annotations
 
@@ -19,9 +19,10 @@ CATEGORIES = (
     "Error Handling",
     "Code Consistency",
     "Build & Tooling",
-    "Client Performance",
+    "Performance",
     "Structural (God Files)",
     "Testing & CI",
+    "Observability & Operations",
 )
 
 PILLARS = ("maintainability", "modularity", "predictability")

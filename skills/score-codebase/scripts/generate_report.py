@@ -481,6 +481,8 @@ button:focus-visible, summary:focus-visible, a:focus-visible { outline: 3px soli
 .score-1, .score-0 { background: rgba(255,92,112,.15); color: var(--red); box-shadow: 0 0 18px rgba(255,92,112,.08); }
 .score-na { color: #aeb8d7; border: 1px dashed #536083; }
 .row-score { font-weight: 850; }
+.anchor-legend { display: flex; flex-wrap: wrap; gap: 8px 20px; margin: 14px 4px 0; padding: 0; list-style: none; color: var(--muted); font-size: 12px; }
+.anchor-legend b { margin-right: 6px; color: var(--ink); font: 800 11px ui-monospace, SFMono-Regular, Menlo, monospace; }
 .confidence-high { color: var(--teal); border-color: rgba(183,255,60,.38); background: rgba(183,255,60,.07); }
 .confidence-medium { color: var(--amber); border-color: rgba(255,180,84,.38); background: rgba(255,180,84,.07); }
 .confidence-low { color: var(--red); border-color: rgba(255,92,112,.38); background: rgba(255,92,112,.07); }
@@ -640,8 +642,17 @@ HTML = Template(
       </section>
       <section class="pillars" aria-label="Pillar scores">$pillars</section>
       <section class="section section-matrix">
-        <header class="section-head"><h2>Three rails.<br>Ten stress points.</h2><p>Every cell is scored from direct evidence. Read across to see whether each engineering area is easy to change, cleanly bounded, and consistently enforced.</p></header>
+        <header class="section-head"><h2>Three rails.<br>Eleven stress points.</h2><p>Every cell is scored from direct evidence. Read across to see whether each engineering area is easy to change, cleanly bounded, and consistently enforced. Overall and pillar scores are the equal-weight mean of the $applicable_cells applicable cells.</p></header>
         <div class="matrix-wrap"><table class="matrix"><thead><tr><th scope="col">Subcategory</th><th scope="col">Maintainability</th><th scope="col">Modularity</th><th scope="col">Predictability</th><th scope="col">Row score</th><th scope="col">Confidence</th></tr></thead><tbody>$matrix</tbody></table></div>
+        <ul class="anchor-legend" aria-label="What the 0 to 5 cell scores mean">
+          <li><b>5</b> Exemplary — systemic and enforced</li>
+          <li><b>4</b> Strong — localized gaps only</li>
+          <li><b>3</b> Mixed — convention without enforcement</li>
+          <li><b>2</b> Weak — repeated, materially costly</li>
+          <li><b>1</b> Critical — broadly hazardous</li>
+          <li><b>0</b> Absent or unsafe</li>
+          <li><b>N/A</b> Technology absent; excluded from means</li>
+        </ul>
       </section>
       <section class="section section-findings">
         <header class="section-head"><h2>What can hurt.</h2><p>Findings are ordered by consequence and tied back to the exact scorecard cells they affect.</p></header>
@@ -716,6 +727,7 @@ def build_html(data: dict[str, Any]) -> str:
         maintainability=rollups["pillars"]["Maintainability"],
         modularity=rollups["pillars"]["Modularity"],
         predictability=rollups["pillars"]["Predictability"],
+        applicable_cells=rollups["applicable_cells"],
         strength=esc(verdict.get("strength", "Not supplied.")),
         risk=esc(verdict.get("risk", "Not supplied.")),
         readiness=esc(verdict.get("readiness", "Not supplied.")),

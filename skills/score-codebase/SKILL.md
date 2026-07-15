@@ -1,6 +1,6 @@
 ---
 name: score-codebase
-description: Score a whole codebase across maintainability, modularity, predictability, and ten engineering subcategories, then produce a concise chat TL;DR, standards-backed improvement plan, and modern HTML report with a repository-scale readout. Use when the user asks for a codebase health audit, engineering quality scorecard, technical-debt baseline, architecture assessment, improvement roadmap, or before-and-after quality comparison.
+description: Score a whole codebase across maintainability, modularity, predictability, and eleven engineering subcategories, then produce a concise chat TL;DR, standards-backed improvement plan, and modern HTML report with a repository-scale readout. Use when the user asks for a codebase health audit, engineering quality scorecard, technical-debt baseline, architecture assessment, improvement roadmap, or before-and-after quality comparison.
 ---
 
 # Score Codebase
@@ -17,6 +17,8 @@ Score these pillars:
 - **Modularity** — how well responsibilities, interfaces, dependencies, and change locality are bounded.
 - **Predictability** — how consistently contracts, runtime behavior, and delivery checks prevent surprises.
 
+The pillars are three lenses on one system and will correlate; a cell earns its own score only through a distinct inference. Maintainability asks whether a competent newcomer can change this safely. Modularity asks whether the boundaries are in the right places. Predictability asks whether good behavior is enforced rather than assumed. Do not copy one rationale across a row.
+
 Score each pillar across these subcategories:
 
 1. Type Safety
@@ -26,9 +28,10 @@ Score each pillar across these subcategories:
 5. Error Handling
 6. Code Consistency
 7. Build & Tooling
-8. Client Performance
+8. Performance
 9. Structural (God Files)
 10. Testing & CI
+11. Observability & Operations
 
 The categories are stack-agnostic; `references/rubric.md` maps each one onto the detected languages, data store, and client platform. Use `N/A` only when the technology is genuinely absent. Missing controls in an applicable area earn a low score, not `N/A`.
 
@@ -75,7 +78,7 @@ Read [`references/rubric.md`](references/rubric.md) in full before scoring. For 
 
 The same fact may affect multiple cells only when the report explains the distinct inference. Consolidate shared root causes instead of presenting them as unrelated defects.
 
-Completion criterion: all 30 cells are supported by evidence or explicitly marked `N/A`; unknowns are identified rather than guessed.
+Completion criterion: all 33 cells are supported by evidence or explicitly marked `N/A`; unknowns are identified rather than guessed.
 
 ### 5. Run the native checks
 
@@ -87,7 +90,7 @@ Completion criterion: every relevant native check is pass, fail, or skipped-with
 
 ### 6. Score after the evidence gate
 
-Apply the anchors in `references/rubric.md`. Put the 30 raw cells into the JSON shape accepted by `scripts/calculate_score.py`, then use that script for equal-weight rollups:
+Apply the anchors in `references/rubric.md`. Put the 33 raw cells into the JSON shape accepted by `scripts/calculate_score.py`, then use that script for equal-weight rollups:
 
 ```bash
 python3 <skill-directory>/scripts/calculate_score.py /tmp/codebase-scores.json
@@ -113,7 +116,7 @@ Read [`references/report-template.md`](references/report-template.md) before wri
 
 End the chat message with a one-line offer of concrete next steps — for example filing the top improvements as tracker issues (`gh issue create` when the repository lives on GitHub) or implementing the first slice of the top improvement. Offer, do not act: the audit stays read-only until the user explicitly accepts, and issues are created only with the user's confirmation. When the user accepts issue filing, create one issue per improvement carrying its observed gap, target state, first slice, completion test, and verification steps from the report.
 
-Put the complete verdict, repository-scale readout, three pillar rollups, 10-row matrix, critical findings, category evidence, standards-backed improvements, verification results, coverage, and limitations in the HTML. Link each improvement to its primary standards or official documentation.
+Put the complete verdict, repository-scale readout, three pillar rollups, 11-row matrix, critical findings, category evidence, standards-backed improvements, verification results, coverage, and limitations in the HTML. Link each improvement to its primary standards or official documentation.
 
 Produce a self-contained HTML report alongside the in-chat scorecard. Read [`references/html-report.md`](references/html-report.md), write the report data JSON outside the audited worktree, and run:
 
