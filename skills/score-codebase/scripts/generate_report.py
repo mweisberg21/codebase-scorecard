@@ -56,6 +56,14 @@ def confidence(value: Any) -> str:
     return normalized if normalized in {"High", "Medium", "Low"} else "Unrated"
 
 
+def confidence_pill(value: Any) -> str:
+    conf = confidence(value)
+    return (
+        f'<span class="confidence confidence-{conf.lower()}" '
+        f'title="How strong the supporting evidence is">{esc(conf)} confidence</span>'
+    )
+
+
 def required_text(payload: dict[str, Any], key: str, context: str) -> str:
     value = str(payload.get(key, "")).strip()
     if not value:
@@ -204,7 +212,7 @@ def render_findings(value: Any) -> str:
         cards.append(
             f"""
             <article class="finding finding-{severity}">
-              <header><span class="severity">{esc(severity)}</span><span class="confidence confidence-{confidence(finding.get('confidence')).lower()}">{esc(confidence(finding.get('confidence')))}</span></header>
+              <header><span class="severity" title="How much this finding matters">{esc(severity)} severity</span>{confidence_pill(finding.get('confidence'))}</header>
               <h3>{esc(finding.get('title', 'Untitled finding'))}</h3>
               <p>{esc(finding.get('summary', ''))}</p>
               <div class="root-cause"><span>Root cause</span>{esc(finding.get('root_cause', 'Not supplied.'))}</div>
@@ -241,7 +249,7 @@ def render_categories(
                 <span><i aria-hidden="true"></i>{esc(category)}</span>
                 <span class="category-trio">{trio}</span>
                 <strong>{esc(row_score)}<small>{'/100' if isinstance(row_score, int) else ''}</small></strong>
-                <span class="confidence confidence-{confidence(confidences.get(category)).lower()}">{esc(confidence(confidences.get(category)))}</span>
+                {confidence_pill(confidences.get(category))}
               </summary>
               <div class="category-body">
                 <div><span class="utility">Strength</span><p>{esc(data.get('strength', 'No strength narrative supplied.'))}</p></div>
@@ -305,13 +313,12 @@ def render_improvements(value: Any) -> str:
         dependency_text = "; ".join(dependencies) if dependencies else "None"
         evidence_items = "".join(f"<li><code>{esc(entry)}</code></li>" for entry in evidence)
         verification_steps = "".join(f"<li><code>{esc(step)}</code></li>" for step in verification)
-        conf = confidence(item.get("confidence"))
         rendered.append(
             f"""
             <article class="improvement">
               <div class="improvement-index">{index:02d}</div>
               <div class="improvement-copy">
-                <div class="improvement-kicker"><span class="utility">Priority {index:02d} · Effort {esc(item.get('effort', '?'))}</span><span class="confidence confidence-{conf.lower()}">{esc(conf)}</span></div>
+                <div class="improvement-kicker"><span class="utility">Priority {index:02d} · Effort {esc(item.get('effort', '?'))}</span>{confidence_pill(item.get('confidence'))}</div>
                 <h3>{esc(title)}</h3>
                 <p class="improvement-why">{esc(why)}</p>
                 <div class="improvement-grid">
