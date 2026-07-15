@@ -111,6 +111,8 @@ Completion criterion: every recommendation passes the applicability and quality 
 
 Read [`references/report-template.md`](references/report-template.md) before writing the final report. In chat, return only the required executive TL;DR: overall score, confidence, repository scale, systemic strength, dominant risk, top three improvements with effort, verification summary, and the HTML path. Keep it under 200 words unless the user asks for detail. Do not duplicate the full matrix or category evidence in chat.
 
+End the chat message with a one-line offer of concrete next steps — for example filing the top improvements as tracker issues (`gh issue create` when the repository lives on GitHub) or implementing the first slice of the top improvement. Offer, do not act: the audit stays read-only until the user explicitly accepts, and issues are created only with the user's confirmation. When the user accepts issue filing, create one issue per improvement carrying its observed gap, target state, first slice, completion test, and verification steps from the report.
+
 Put the complete verdict, repository-scale readout, three pillar rollups, 10-row matrix, critical findings, category evidence, standards-backed improvements, verification results, coverage, and limitations in the HTML. Link each improvement to its primary standards or official documentation.
 
 Produce a self-contained HTML report alongside the in-chat scorecard. Read [`references/html-report.md`](references/html-report.md), write the report data JSON outside the audited worktree, and run:
