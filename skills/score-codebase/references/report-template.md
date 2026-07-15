@@ -13,6 +13,7 @@ Keep the final chat response under 200 words unless the user asks for the full n
 5. **Next moves** — the top three improvement titles with effort (`S`, `M`, `L`).
 6. **Checks** — pass/fail/skipped counts and the most consequential failure or limitation.
 7. **Full report** — a clickable absolute path to the HTML and whether it was visually inspected or structurally validated.
+8. **Offer** — one line offering next steps (file the improvements as tracker issues, implement the first slice) without acting on them until the user accepts.
 
 Do not paste the score matrix, category-by-category rationale, exhaustive evidence, or standards bibliography into chat. Those belong in the HTML. Include a 0–1 cell in the verdict line when one exists.
 
@@ -30,6 +31,8 @@ Next: (1) Split feedback policy from orchestration — M. (2) Add a measured per
 
 Checks: 3 passed, 0 failed, 1 skipped; production telemetry was unavailable.
 Full report: [Open the HTML scorecard](/absolute/path/to/report.html) — visually inspected.
+
+Want me to file these three as GitHub issues, or start on (1)?
 ```
 
 ## Full HTML report

@@ -493,7 +493,8 @@ button:focus-visible, summary:focus-visible, a:focus-visible { outline: 3px soli
 .finding-medium { --severity: var(--amber); }
 .finding-low { --severity: var(--teal); }
 .finding header { display: flex; justify-content: space-between; gap: 12px; }
-.finding .severity { color: white; border-color: var(--severity); background: var(--severity); }
+.finding .severity { color: #05070d; border-color: var(--severity); background: var(--severity); }
+.finding-critical .severity { color: #f6f8ff; }
 .finding h3 { margin: 18px 0 8px; font-size: 25px; line-height: 1.12; letter-spacing: -.035em; }
 .finding p { color: #b6c0d3; }
 .root-cause, .completion { padding: 13px 15px; background: #101624; border-left: 3px solid var(--blue); }
