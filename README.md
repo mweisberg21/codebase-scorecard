@@ -58,6 +58,8 @@ Across:
 
 The skill produces:
 
+- a concise decision-ready TL;DR in chat;
+- a repository-scale readout with authored LOC, files, source, tests, and other confirmed counts;
 - a reproducible 30-cell score matrix;
 - evidence-linked findings and confidence levels;
 - standards-backed improvements with a target state, first slice, completion test, and verification path;

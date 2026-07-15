@@ -1,6 +1,6 @@
 ---
 name: score-codebase
-description: Score a whole codebase across maintainability, modularity, predictability, and ten engineering subcategories, then produce a standards-backed improvement plan and modern HTML report. Use when the user asks for a codebase health audit, engineering quality scorecard, technical-debt baseline, architecture assessment, improvement roadmap, or before-and-after quality comparison.
+description: Score a whole codebase across maintainability, modularity, predictability, and ten engineering subcategories, then produce a concise chat TL;DR, standards-backed improvement plan, and modern HTML report with a repository-scale readout. Use when the user asks for a codebase health audit, engineering quality scorecard, technical-debt baseline, architecture assessment, improvement roadmap, or before-and-after quality comparison.
 ---
 
 # Score Codebase
@@ -48,9 +48,9 @@ Run `scripts/inventory.py` from this skill against the target root and save its 
 python3 <skill-directory>/scripts/inventory.py <repository-root> > /tmp/codebase-inventory.json
 ```
 
-Use the census to map languages, packages, entry points, configs, source directories, tests, CI, database assets, generated files, and structural hotspots. Supplement it with the repository's manifests and `rg` searches; the inventory is orientation, not a verdict.
+Use the census to map languages, packages, entry points, configs, source directories, tests, CI, database assets, generated files, and structural hotspots. Preserve the generated `report_metrics` definitions so repository-scale numbers remain reproducible. Supplement the default metrics with a confirmed packages/apps count when manifests or workspace configuration establish one; do not infer packages from folder names alone. Keep four to six headline metrics. The inventory is orientation, not a verdict.
 
-Completion criterion: every first-party file belongs to a visited source, test, database, configuration, CI, documentation, asset, generated, or explicit exclusion surface.
+Completion criterion: every first-party file belongs to a visited source, test, database, configuration, CI, documentation, asset, generated, or explicit exclusion surface, and the audit records authored nonblank LOC, total files, authored source files, test files, plus any confidently established package/app or platform-specific counts.
 
 ### 3. Inspect breadth before depth
 
@@ -105,7 +105,9 @@ Completion criterion: every recommendation passes the applicability and quality 
 
 ### 8. Deliver the scorecard
 
-Read [`references/report-template.md`](references/report-template.md) before writing the final report. Lead with the verdict, then the three pillar rollups, the 10-row matrix, critical findings, category evidence, standards-backed improvements, verification results, coverage, and limitations. Link to local files with line numbers when the host supports clickable paths. Link each improvement to its primary standards or official documentation.
+Read [`references/report-template.md`](references/report-template.md) before writing the final report. In chat, return only the required executive TL;DR: overall score, confidence, repository scale, systemic strength, dominant risk, top three improvements with effort, verification summary, and the HTML path. Keep it under 200 words unless the user asks for detail. Do not duplicate the full matrix or category evidence in chat.
+
+Put the complete verdict, repository-scale readout, three pillar rollups, 10-row matrix, critical findings, category evidence, standards-backed improvements, verification results, coverage, and limitations in the HTML. Link each improvement to its primary standards or official documentation.
 
 Produce a self-contained HTML report alongside the in-chat scorecard. Read [`references/html-report.md`](references/html-report.md), write the report data JSON outside the audited worktree, and run:
 
@@ -117,7 +119,7 @@ Use a user-specified output path when provided. Otherwise keep both generated ar
 
 Bound every correctness and security conclusion to the inspected evidence. State what was inspected and what remained unverified.
 
-Completion criterion: a reader can reproduce the totals, trace each material claim to code or command output, understand why each recommended standard applies, start the next three improvements without another discovery pass, and open a verified HTML artifact containing the same scores, evidence, and improvement plan.
+Completion criterion: the chat TL;DR is decision-ready without becoming a second report, and a reader can open the verified HTML artifact to reproduce the totals, trace each material claim, understand why each recommended standard applies, and start the next three improvements without another discovery pass.
 
 ## Comparison branch
 

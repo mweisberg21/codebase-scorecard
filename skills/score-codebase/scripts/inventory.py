@@ -367,32 +367,65 @@ def main() -> int:
         key=lambda record: (-record["nonblank_lines"], record["path"]),
     )[: max(args.top, 0)]
 
+    totals = {
+        "files": len(records),
+        "text_files": sum(record["read_state"] == "text" for record in records),
+        "source_files": count_where(records, "source"),
+        "authored_source_files": len(source_records),
+        "authored_source_nonblank_lines": sum(
+            record["nonblank_lines"] for record in source_records
+        ),
+        "test_files": count_where(records, "test"),
+        "config_files": count_where(records, "config"),
+        "ci_files": count_where(records, "ci"),
+        "database_files": count_where(records, "database"),
+        "generated_files": count_where(records, "generated"),
+        "binary_files": sum(record["read_state"] == "binary" for record in records),
+        "oversized_files": sum(
+            record["read_state"] == "oversized" for record in records
+        ),
+        "symlinks": sum(record["read_state"] == "symlink" for record in records),
+        "unreadable_files": sum(
+            record["read_state"] == "unreadable" for record in records
+        ),
+    }
     result = {
         "root": str(root),
         "collection_method": method,
         "git": git_state(root),
-        "totals": {
-            "files": len(records),
-            "text_files": sum(record["read_state"] == "text" for record in records),
-            "source_files": count_where(records, "source"),
-            "authored_source_files": len(source_records),
-            "authored_source_nonblank_lines": sum(
-                record["nonblank_lines"] for record in source_records
-            ),
-            "test_files": count_where(records, "test"),
-            "config_files": count_where(records, "config"),
-            "ci_files": count_where(records, "ci"),
-            "database_files": count_where(records, "database"),
-            "generated_files": count_where(records, "generated"),
-            "binary_files": sum(record["read_state"] == "binary" for record in records),
-            "oversized_files": sum(
-                record["read_state"] == "oversized" for record in records
-            ),
-            "symlinks": sum(record["read_state"] == "symlink" for record in records),
-            "unreadable_files": sum(
-                record["read_state"] == "unreadable" for record in records
-            ),
-        },
+        "totals": totals,
+        "report_metrics": [
+            {
+                "label": "Authored LOC",
+                "value": totals["authored_source_nonblank_lines"],
+                "detail": "Nonblank source lines; generated files excluded",
+            },
+            {
+                "label": "Files inventoried",
+                "value": totals["files"],
+                "detail": "Tracked and untracked files; ignore rules honored",
+            },
+            {
+                "label": "Authored source",
+                "value": totals["authored_source_files"],
+                "detail": "Recognized source files; generated files excluded",
+            },
+            {
+                "label": "Test files",
+                "value": totals["test_files"],
+                "detail": "Detected from test paths and filename conventions",
+            },
+            {
+                "label": "Database files",
+                "value": totals["database_files"],
+                "detail": "SQL, schema, migration, and database surfaces",
+            },
+            {
+                "label": "CI files",
+                "value": totals["ci_files"],
+                "detail": "Detected workflow and CI configuration files",
+            },
+        ],
         "extension_counts": dict(sorted(extensions.items(), key=lambda item: (-item[1], item[0]))),
         "top_level_counts": dict(sorted(directories.items(), key=lambda item: (-item[1], item[0]))),
         "largest_authored_source_files": hotspots,

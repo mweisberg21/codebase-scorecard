@@ -29,6 +29,7 @@ PILLAR_ABBREVIATIONS = {
 
 SEVERITIES = {"critical", "high", "medium", "low"}
 RESULTS = {"pass", "fail", "skipped"}
+METRIC_COLORS = ("#62f4ff", "#ff4ecd", "#b7ff3c", "#ffb454", "#a78bfa", "#ff5c70")
 
 
 def parse_args() -> argparse.Namespace:
@@ -68,6 +69,42 @@ def safe_http_url(value: Any, context: str) -> str:
     if parsed.scheme not in {"http", "https"} or not parsed.netloc:
         raise ValueError(f"{context} must use an http or https URL")
     return url
+
+
+def metric_value(value: Any, context: str) -> str:
+    if value is None or (isinstance(value, str) and not value.strip()):
+        raise ValueError(f"{context} is missing required field: value")
+    if isinstance(value, bool):
+        return str(value)
+    if isinstance(value, int):
+        return f"{value:,}"
+    if isinstance(value, float):
+        return f"{value:,.0f}" if value.is_integer() else f"{value:,.1f}"
+    return str(value).strip()
+
+
+def render_repository_metrics(value: Any) -> str:
+    metrics = [entry for entry in items(value) if isinstance(entry, dict)]
+    if not 4 <= len(metrics) <= 6:
+        raise ValueError("repository_metrics must contain four to six metrics")
+
+    rendered = []
+    for index, metric in enumerate(metrics, 1):
+        context = f"repository metric {index}"
+        label = required_text(metric, "label", context)
+        display_value = metric_value(metric.get("value"), context)
+        detail = str(metric.get("detail", "Repository census")).strip()
+        color = METRIC_COLORS[index - 1]
+        rendered.append(
+            f"""
+            <article class="repo-metric" style="--metric-accent:{color}">
+              <span>{esc(label)}</span>
+              <strong>{esc(display_value)}</strong>
+              <small>{esc(detail)}</small>
+            </article>
+            """
+        )
+    return "".join(rendered)
 
 
 def score_text(value: float | None) -> str:
@@ -388,6 +425,12 @@ button:focus-visible, summary:focus-visible, a:focus-visible { outline: 3px soli
 .core-track { height: 7px; overflow: hidden; border: 1px solid #2d3953; background: #090d16; }
 .core-track i { display: block; width: var(--value); height: 100%; background: var(--signal); box-shadow: 0 0 16px var(--signal); }
 .core-signal b { color: var(--signal); text-align: right; }
+.repository-readout { display: grid; grid-template-columns: repeat(auto-fit, minmax(155px, 1fr)); gap: 1px; overflow: hidden; margin: 0 0 16px; padding: 1px; border-radius: 16px; background: var(--line); box-shadow: var(--shadow); }
+.repo-metric { --metric-accent: var(--blue); position: relative; min-height: 132px; padding: 20px; background: #090d16; }
+.repo-metric::before { content: ""; position: absolute; inset: 0 0 auto; height: 2px; background: var(--metric-accent); box-shadow: 0 0 16px var(--metric-accent); }
+.repo-metric span { display: block; color: var(--muted); font: 750 9px/1.35 ui-monospace, SFMono-Regular, Menlo, monospace; text-transform: uppercase; letter-spacing: .11em; }
+.repo-metric strong { display: block; margin: 12px 0 7px; color: var(--metric-accent); font: 850 clamp(25px, 3vw, 38px)/1 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: -.06em; text-shadow: 0 0 20px color-mix(in srgb, var(--metric-accent) 22%, transparent); }
+.repo-metric small { display: block; color: #727f99; font-size: 10px; line-height: 1.35; }
 .signals { display: grid; grid-template-columns: repeat(3, 1fr); overflow: hidden; border: 1px solid var(--line); border-radius: 16px; background: rgba(12,17,27,.9); box-shadow: var(--shadow); }
 .signal { min-height: 120px; padding: 20px; }
 .signal + .signal { border-left: 1px solid var(--line); }
@@ -578,6 +621,7 @@ HTML = Template(
           </div>
         </aside>
       </section>
+      <section class="repository-readout" aria-label="Repository scale">$repository_metrics</section>
       <section class="signals" aria-label="Executive summary">
         <div class="signal"><span class="utility">Systemic strength</span><p>$strength</p></div>
         <div class="signal"><span class="utility">Dominant risk</span><p>$risk</p></div>
@@ -636,6 +680,7 @@ def build_html(data: dict[str, Any]) -> str:
     coverage_summary, coverage_stats, coverage_details = render_coverage(
         data.get("coverage")
     )
+    repository_metrics = render_repository_metrics(data.get("repository_metrics"))
 
     repository = meta.get("repository", "Codebase")
     revision = str(meta.get("revision", "revision unknown"))
@@ -663,6 +708,7 @@ def build_html(data: dict[str, Any]) -> str:
         strength=esc(verdict.get("strength", "Not supplied.")),
         risk=esc(verdict.get("risk", "Not supplied.")),
         readiness=esc(verdict.get("readiness", "Not supplied.")),
+        repository_metrics=repository_metrics,
         pillars=render_pillars(
             rollups, mapping(data.get("pillar_reasons")), pillar_confidence
         ),

@@ -1,4 +1,4 @@
 interface:
   display_name: "Codebase Scorecard"
   short_description: "Score codebase health and improvement paths"
-  default_prompt: "Use $score-codebase to audit this repository and produce an evidence-backed scorecard, standards-backed improvement plan, and modern HTML report."
+  default_prompt: "Use $score-codebase to audit this repository and return a concise chat TL;DR plus an evidence-backed HTML scorecard with repository-scale metrics and standards-backed improvements."
