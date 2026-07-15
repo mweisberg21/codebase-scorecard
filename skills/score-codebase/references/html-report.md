@@ -4,7 +4,7 @@ Use `scripts/generate_report.py` to turn one JSON object into a self-contained, 
 
 ## Required fields
 
-The `scores` object below shows one row's shape; the real input must repeat it for all ten rows.
+The `scores` object below shows one row's shape; the real input must repeat it for all eleven rows.
 
 ```json
 {
@@ -45,7 +45,7 @@ The `scores` object below shows one row's shape; the real input must repeat it f
 }
 ```
 
-Include all ten exact subcategory keys from `references/rubric.md`. Each row contains the exact lowercase pillar keys `maintainability`, `modularity`, and `predictability`. Use `null` for all three cells of an inapplicable row.
+Include all eleven exact subcategory keys from `references/rubric.md`. Each row contains the exact lowercase pillar keys `maintainability`, `modularity`, and `predictability`. Use `null` for all three cells of an inapplicable row.
 
 `repository_metrics` is required and must contain four to six items. Start with `report_metrics` from `scripts/inventory.py`. Use numeric values when possible so the generator formats thousands consistently. Include a short `detail` that defines non-obvious measurements. Replace or supplement the last metrics with a packages/apps count only when repository manifests or workspace configuration establish it.
 

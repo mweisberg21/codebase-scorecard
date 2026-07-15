@@ -72,12 +72,20 @@ Use this map to find the right primary sources. It is a routing guide, not a req
 - Use NIST SSDF for supply-chain and secure-build process recommendations where applicable.
 - Recommend reproducible commands and version pinning only when current evidence shows drift or non-determinism.
 
-### Client Performance
+### Performance
 
 - For web clients, use the official **web.dev Core Web Vitals** definitions for LCP, INP, and CLS, including the 75th-percentile evaluation model.
 - For mobile or desktop clients, use the platform's official performance guidance.
+- For servers and workers, use the detected database's official documentation for query planning and indexing, and the framework/runtime's official guidance for caching, timeouts, connection pooling, and concurrency.
 - Use official framework performance guidance for the detected version.
-- Do not assign a runtime performance score from bundle heuristics alone. Recommend measurement when field or lab data is absent.
+- Do not assign a runtime performance score from bundle heuristics or query shape alone. Recommend measurement when field or lab data is absent.
+
+### Observability & Operations
+
+- Use official **OpenTelemetry** documentation for instrumentation, trace propagation, and semantic conventions when recommending telemetry work.
+- Use the detected platform's official operations guidance (cloud provider, orchestrator, or PaaS documentation) for health checks, alerting, deploys, and rollbacks.
+- The **Google SRE** publications are acceptable as an authoritative practice reference for SLOs and symptom-based alerting; label the authority type accordingly.
+- Recommend instrumentation proportionate to what the team operates. Do not prescribe a full observability stack for a repository with no hosted runtime.
 
 ### Structural (God Files)
 

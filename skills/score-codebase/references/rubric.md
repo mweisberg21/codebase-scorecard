@@ -110,14 +110,15 @@ Apply this rubric to the detected data store — a relational or document databa
 - **Predictability:** tool/runtime versions, lockfiles, environment validation, clean builds, caches, and release workflows produce reproducible results.
 - **Probe:** manifests, scripts, lockfiles, version managers, workspace/task config, environment schemas, generated artifacts, clean build behavior, dependency health, and setup docs.
 
-### 8. Client Performance
+### 8. Performance
 
-Apply this rubric to the user-facing client — web, mobile, or desktop. Use `N/A` when no user-facing client exists. Score evidence and safeguards, not speculative micro-optimizations.
+Score the performance discipline of every runtime surface the codebase ships — client, server, worker, or CLI. Use `N/A` only when the repository has no runtime surface at all (for example pure configuration or documentation). Score evidence and safeguards, not speculative micro-optimizations.
 
-- **Maintainability:** performance-sensitive data, rendering, assets, and caching patterns are understandable and centralized rather than patched per component.
-- **Modularity:** client/server and async boundaries minimize shipped code, waterfalls, rerender coupling, global state, and oversized route/component dependencies.
-- **Predictability:** budgets, measurements, bundle analysis, caching rules, image/font policy, and regression checks make performance visible before users report it.
-- **Probe:** client entry points, bundle/code splitting, route loading, fetch waterfalls, caching, large dependencies, images/fonts, render loops, list virtualization, Web Vitals, performance tests, and build output.
+- **Maintainability:** performance-sensitive data access, rendering, assets, and caching patterns are understandable and centralized rather than patched per call site.
+- **Modularity:** client/server and async boundaries minimize shipped code, request waterfalls, rerender coupling, chatty service calls, and oversized route/component/module dependencies; caching and batching live at their owning layer.
+- **Predictability:** budgets, measurements, bundle analysis, caching rules, timeout/backpressure policy, and regression checks make performance visible before users report it.
+- **Client probe:** entry points, bundle/code splitting, route loading, fetch waterfalls, caching, large dependencies, images/fonts, render loops, list virtualization, Web Vitals, performance tests, and build output.
+- **Server probe:** query patterns and N+1 risks, indexes on hot paths, connection and pool handling, caching layers and invalidation, pagination on unbounded reads, timeouts and retries on outbound calls, concurrency/streaming on large payloads, and any load or benchmark harness.
 
 ### 9. Structural (God Files)
 
@@ -128,12 +129,23 @@ Apply this rubric to the user-facing client — web, mobile, or desktop. Use `N/
 
 Size is a lead, not a verdict. Generated files, declarative schemas, fixtures, and cohesive registries are not god files merely because they are long.
 
+Score a structural root cause at full weight here, once. Other categories and pillars may reflect the same hotspot only through a distinct consequence they can name (for example an authorization path that is hard to audit because it lives in a god file). Do not let one oversized file crater Architecture, Code Consistency, and Structural simultaneously without three distinct inferences.
+
 ### 10. Testing & CI
 
 - **Maintainability:** tests describe behavior, use stable fixtures/helpers, fail clearly, and can change with the code without excessive mocking or duplication.
 - **Modularity:** seams permit the right unit/integration/end-to-end split; critical boundaries and failure paths are tested at their owning layer.
 - **Predictability:** local and hosted checks agree, tests are deterministic, critical paths and regressions are covered, skips are controlled, and required gates block bad changes.
 - **Probe:** test layout/config, representative tests, coverage if configured, mocks/fixtures, skipped/flaky tests, CI workflows, branch gates, migration checks, artifact checks, and actual test/CI-equivalent output.
+
+### 11. Observability & Operations
+
+Score whether the running system can be understood, diagnosed, and safely changed in production. Use `N/A` only when the team operates nothing — for example a library or CLI distributed to users with no hosted runtime. For operated services this category is always applicable; absent instrumentation earns a low score, not `N/A`.
+
+- **Maintainability:** logs, metrics, and traces are structured, correlated, and readable enough to diagnose an incident without reading source; instrumentation follows one convention instead of per-module invention.
+- **Modularity:** telemetry is emitted at boundaries through shared helpers, not scattered ad-hoc calls; operational concerns (health checks, feature flags, config) are separated from domain logic.
+- **Predictability:** alerting on symptoms, health/readiness endpoints, error reporting, deploy and rollback procedures, gated migrations, and runbooks make failures visible and reversible before users report them.
+- **Probe:** logging configuration and structure, metrics/tracing libraries (for example OpenTelemetry), error-reporting integration, health endpoints, alert and dashboard definitions (especially as code), deploy pipelines and rollback paths, migration gating, feature flags, and runbooks or on-call documentation.
 
 ## Evidence rules
 

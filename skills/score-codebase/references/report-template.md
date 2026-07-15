@@ -65,9 +65,10 @@ Show raw 0–5 cell scores so the rollup is reproducible.
 | Error Handling | | | | | |
 | Code Consistency | | | | | |
 | Build & Tooling | | | | | |
-| Client Performance | | | | | |
+| Performance | | | | | |
 | Structural (God Files) | | | | | |
 | Testing & CI | | | | | |
+| Observability & Operations | | | | | |
 
 ## Critical findings
 

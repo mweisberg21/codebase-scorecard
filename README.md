@@ -1,6 +1,6 @@
 # Codebase Scorecard
 
-An evidence-backed Agent Skill that audits an entire codebase across three engineering pillars and ten operational categories, then produces a standards-backed improvement plan and a self-contained dark-neon HTML report.
+An evidence-backed Agent Skill that audits an entire codebase across three engineering pillars and eleven operational categories, then produces a standards-backed improvement plan and a self-contained dark-neon HTML report.
 
 ![Codebase Scorecard report](assets/codebase-scorecard-preview.png)
 
@@ -56,11 +56,12 @@ Across:
 5. Error Handling
 6. Code Consistency
 7. Build & Tooling
-8. Client Performance
+8. Performance
 9. Structural (God Files)
 10. Testing & CI
+11. Observability & Operations
 
-The categories are stack-agnostic: Type Safety covers TypeScript, mypy/pyright, Go, Rust, and similar type systems; Data & Persistence covers any database or ORM (Supabase, PostgreSQL, Prisma, and others); Client Performance covers web, mobile, or desktop clients. Categories that genuinely do not apply are marked N/A and excluded from the averages.
+The categories are stack-agnostic: Type Safety covers TypeScript, mypy/pyright, Go, Rust, and similar type systems; Data & Persistence covers any database or ORM (Supabase, PostgreSQL, Prisma, and others); Performance covers client, server, and worker surfaces; Observability & Operations covers logging, metrics, tracing, alerting, and deploy/rollback safety for anything the team operates. Categories that genuinely do not apply are marked N/A and excluded from the averages.
 
 ## Output
 
@@ -68,7 +69,7 @@ The skill produces:
 
 - a concise decision-ready TL;DR in chat;
 - a repository-scale readout with authored LOC, files, source, tests, and other confirmed counts;
-- a reproducible 30-cell score matrix;
+- a reproducible 33-cell score matrix;
 - evidence-linked findings and confidence levels;
 - standards-backed improvements with a target state, first slice, completion test, and verification path;
 - a self-contained responsive HTML report;
