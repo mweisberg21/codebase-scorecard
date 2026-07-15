@@ -55,14 +55,14 @@ Show raw 0–5 cell scores so the rollup is reproducible.
 
 | Subcategory | Maintainability | Modularity | Predictability | Row /100 | Confidence |
 | --- | ---: | ---: | ---: | ---: | --- |
-| TypeScript Safety | | | | | |
+| Type Safety | | | | | |
 | Architecture | | | | | |
 | Security | | | | | |
-| Database/Supabase | | | | | |
+| Data & Persistence | | | | | |
 | Error Handling | | | | | |
 | Code Consistency | | | | | |
 | Build & Tooling | | | | | |
-| Frontend Performance | | | | | |
+| Client Performance | | | | | |
 | Structural (God Files) | | | | | |
 | Testing & CI | | | | | |
 

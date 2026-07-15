@@ -27,10 +27,16 @@ Restart Codex or open a fresh Claude Code session after installation.
 
 ## Use
 
-Invoke the skill directly:
+Invoke the skill directly. In Codex:
 
 ```text
 $score-codebase
+```
+
+In Claude Code:
+
+```text
+/score-codebase
 ```
 
 You can also ask your agent to audit the current repository, establish a technical-debt baseline, compare two revisions, or generate an engineering health scorecard.
@@ -43,16 +49,18 @@ The audit scores:
 
 Across:
 
-1. TypeScript Safety
+1. Type Safety
 2. Architecture
 3. Security
-4. Database/Supabase
+4. Data & Persistence
 5. Error Handling
 6. Code Consistency
 7. Build & Tooling
-8. Frontend Performance
+8. Client Performance
 9. Structural (God Files)
 10. Testing & CI
+
+The categories are stack-agnostic: Type Safety covers TypeScript, mypy/pyright, Go, Rust, and similar type systems; Data & Persistence covers any database or ORM (Supabase, PostgreSQL, Prisma, and others); Client Performance covers web, mobile, or desktop clients. Categories that genuinely do not apply are marked N/A and excluded from the averages.
 
 ## Output
 
@@ -81,3 +89,7 @@ npx skills update score-codebase --global --yes
 - Python 3.10 or newer when running the bundled inventory, scoring, and report scripts
 
 The report generator uses only the Python standard library and does not load external assets at runtime.
+
+## License
+
+[MIT](LICENSE)

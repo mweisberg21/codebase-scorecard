@@ -19,18 +19,18 @@ Score these pillars:
 
 Score each pillar across these subcategories:
 
-1. TypeScript Safety
+1. Type Safety
 2. Architecture
 3. Security
-4. Database/Supabase
+4. Data & Persistence
 5. Error Handling
 6. Code Consistency
 7. Build & Tooling
-8. Frontend Performance
+8. Client Performance
 9. Structural (God Files)
 10. Testing & CI
 
-Use `N/A` only when the technology is genuinely absent. Missing controls in an applicable area earn a low score, not `N/A`.
+The categories are stack-agnostic; `references/rubric.md` maps each one onto the detected languages, data store, and client platform. Use `N/A` only when the technology is genuinely absent. Missing controls in an applicable area earn a low score, not `N/A`.
 
 ## Workflow
 
@@ -48,6 +48,8 @@ Run `scripts/inventory.py` from this skill against the target root and save its 
 python3 <skill-directory>/scripts/inventory.py <repository-root> > /tmp/codebase-inventory.json
 ```
 
+Do not read the inventory JSON into context wholesale; query it with `jq` or a short Python snippet. On very large repositories pass `--summary` to omit the per-file records.
+
 Use the census to map languages, packages, entry points, configs, source directories, tests, CI, database assets, generated files, and structural hotspots. Preserve the generated `report_metrics` definitions so repository-scale numbers remain reproducible. Supplement the default metrics with a confirmed packages/apps count when manifests or workspace configuration establish one; do not infer packages from folder names alone. Keep four to six headline metrics. The inventory is orientation, not a verdict.
 
 Completion criterion: every first-party file belongs to a visited source, test, database, configuration, CI, documentation, asset, generated, or explicit exclusion surface, and the audit records authored nonblank LOC, total files, authored source files, test files, plus any confidently established package/app or platform-specific counts.
@@ -57,6 +59,8 @@ Completion criterion: every first-party file belongs to a visited source, test, 
 Read root manifests and configs first, then package entry points and representative feature paths end to end. Inspect tests beside the behavior they claim to cover. Open every high-risk search hit and structural hotspot; trace important flows across UI/API, authorization, data access, persistence, and side effects where present.
 
 Define “entire codebase” as every file covered by the census and broad searches, every major surface sampled directly, and every material signal followed to evidence. Reserve line-by-line reading for the files that carry the strongest signals.
+
+Scale inspection to the repository. Beyond roughly 2,000 authored source files or 300k authored LOC, full direct inspection will not fit a single pass: still read every manifest, entry point, and root config, but sample representative feature paths per package and prioritize opening high-risk search hits over breadth-first reading. When sampling substitutes for direct inspection, say so explicitly in coverage and limitations, and cap the affected subcategory confidence at Medium. Never claim a completion criterion that sampling did not actually satisfy.
 
 Completion criterion: each applicable subcategory has direct evidence from at least two independent locations or mechanisms, and no discovered high-risk signal remains uninspected.
 
@@ -115,7 +119,7 @@ Produce a self-contained HTML report alongside the in-chat scorecard. Read [`ref
 python3 <skill-directory>/scripts/generate_report.py /tmp/codebase-report.json /tmp/<repo-slug>-codebase-scorecard.html
 ```
 
-Use a user-specified output path when provided. Otherwise keep both generated artifacts in `/tmp` so an assessment leaves the repository clean. Open the HTML in an available browser and inspect desktop and narrow layouts; when no browser is available, parse the document and check that every required section and score is present.
+Use a user-specified output path when provided. Otherwise write the HTML to a persistent location outside the worktree — for example the repository's parent directory as `<repo-slug>-codebase-scorecard.html` — so the assessment leaves the repository clean and the report survives the session; keep intermediate JSON in a temporary directory. Always give the user the report's absolute path, and in hosted or sandboxed sessions surface the file itself rather than assuming the user can browse the filesystem. Open the HTML in an available browser and inspect desktop and narrow layouts; when no browser is available, parse the document and check that every required section and score is present.
 
 Bound every correctness and security conclusion to the inspected evidence. State what was inspected and what remained unverified.
 
@@ -123,4 +127,4 @@ Completion criterion: the chat TL;DR is decision-ready without becoming a second
 
 ## Comparison branch
 
-When comparing two revisions, audit both with the same exclusions, weights, checks, and rubric. Report cell-level deltas, distinguish code changes from confidence changes, and calibrate conclusions to the lower-confidence revision.
+When comparing two revisions, audit both with the same exclusions, weights, checks, rubric, model, and effort level. Report cell-level deltas, distinguish code changes from confidence changes, and calibrate conclusions to the lower-confidence revision. Rubric scores carry run-to-run noise: treat an overall delta within about three points as no change unless specific cells moved with new evidence, and lead with the evidence behind each moved cell rather than the aggregate number.

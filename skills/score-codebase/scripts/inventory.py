@@ -9,6 +9,7 @@ import os
 from collections import Counter
 from pathlib import Path
 import subprocess
+import sys
 from typing import Iterable
 
 
@@ -117,6 +118,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--top", type=int, default=30, help="Number of structural hotspots to show"
     )
+    parser.add_argument(
+        "--summary",
+        action="store_true",
+        help="Omit per-file records to keep output small on large repositories",
+    )
     return parser.parse_args()
 
 
@@ -152,14 +158,20 @@ def git_files(root: Path) -> tuple[list[Path], str] | None:
     for value in raw.split(b"\0"):
         if not value:
             continue
-        path = top / os.fsdecode(value)
+        relative = Path(os.fsdecode(value))
+        if IGNORED_DIRECTORIES.intersection(relative.parts[:-1]):
+            continue
+        path = top / relative
         try:
             path.relative_to(root)
         except ValueError:
             continue
         if path.is_file() or path.is_symlink():
             files.append(path)
-    return sorted(set(files)), "git tracked + untracked, respecting ignore rules"
+    return (
+        sorted(set(files)),
+        "git tracked + untracked, respecting ignore rules; standard dependency/build directories excluded",
+    )
 
 
 def walked_files(root: Path) -> tuple[list[Path], str]:
@@ -225,7 +237,7 @@ def is_database(path: Path) -> bool:
     return bool(
         path.suffix.lower() in {".sql", ".prisma"}
         or lowered_parts.intersection(
-            {"database", "db", "drizzle", "migrations", "prisma", "schema", "supabase"}
+            {"database", "db", "drizzle", "migrations", "prisma", "supabase"}
         )
         or lowered.startswith("schema.")
     )
@@ -429,10 +441,11 @@ def main() -> int:
         "extension_counts": dict(sorted(extensions.items(), key=lambda item: (-item[1], item[0]))),
         "top_level_counts": dict(sorted(directories.items(), key=lambda item: (-item[1], item[0]))),
         "largest_authored_source_files": hotspots,
-        "files": records,
     }
-    json.dump(result, fp=os.sys.stdout, indent=2, sort_keys=False)
-    os.sys.stdout.write("\n")
+    if not args.summary:
+        result["files"] = records
+    json.dump(result, fp=sys.stdout, indent=2, sort_keys=False)
+    sys.stdout.write("\n")
     return 0
 
 

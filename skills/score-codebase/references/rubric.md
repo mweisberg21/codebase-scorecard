@@ -10,7 +10,7 @@
 
 ## Scoring anchors
 
-Score each applicable cell from 0 to 5:
+Score each applicable cell with a whole number from 0 to 5. Do not use half points; fractional cells add run-to-run noise and break before-and-after comparisons.
 
 | Score | Meaning | Evidence standard |
 | ---: | --- | --- |
@@ -57,14 +57,14 @@ Confidence measures evidence quality, not code quality. A high score with low co
 
 ## Subcategory rubric
 
-### 1. TypeScript Safety
+### 1. Type Safety
 
-Use `N/A` when TypeScript is absent.
+Score the type discipline of the codebase's primary languages: TypeScript or Flow for JavaScript, mypy/pyright for Python, Sorbet for Ruby, and the native type system in Go, Rust, Java, Kotlin, Swift, and similar languages. Use `N/A` only when no primary language offers static or gradual typing. Absent or unenforced type checking in a language that supports it earns a low score, not `N/A`.
 
-- **Maintainability:** strict, expressive types reduce casts, `any`, suppression comments, unsafe non-null assertions, and duplicated shapes; generated types have a clear update path.
+- **Maintainability:** strict, expressive types reduce casts, escape hatches (`any`, `Any`, `interface{}`, `unsafe`), suppression comments, unsafe assertions, and duplicated shapes; generated types have a clear update path.
 - **Modularity:** contracts are owned at their seams, public types are narrow, domain types do not leak storage/framework details, and dependency direction is visible in imports.
-- **Predictability:** strict compiler options, runtime validation at untyped boundaries, exhaustive state handling, and CI typechecks make invalid states fail consistently.
-- **Probe:** `tsconfig*`, package scripts, boundary schemas, generated types, `any`, `unknown`, `@ts-ignore`, `@ts-expect-error`, assertions, duplicate interfaces, and actual typecheck output.
+- **Predictability:** strict checker options, runtime validation at untyped boundaries, exhaustive state handling, and CI typechecks make invalid states fail consistently.
+- **Probe:** checker configuration (`tsconfig*`, `mypy.ini`, `pyrightconfig.json`, `pyproject.toml` tool sections, compiler flags), package scripts, boundary schemas, generated types, escape hatches and suppressions (`any`, `@ts-ignore`, `# type: ignore`, unchecked casts), duplicate interfaces, and actual typecheck output.
 
 ### 2. Architecture
 
@@ -80,14 +80,14 @@ Use `N/A` when TypeScript is absent.
 - **Predictability:** deny-by-default behavior, environment guards, tests, secret handling, dependency policy, audit trails, rate limits, and signature/CSRF/replay controls make failure modes consistent.
 - **Probe:** request handlers, server actions, authn/authz, tenant isolation, input/output validation, secrets/logging, uploads, webhooks, external fetches, unsafe rendering, production guards, dependency audit, and security tests.
 
-### 4. Database/Supabase
+### 4. Data & Persistence
 
-Use the equivalent rubric for another database. Use `N/A` only when no persistent database exists.
+Apply this rubric to the detected data store — a relational or document database, an ORM, a platform such as Supabase or Firebase, or file-based persistence. Use `N/A` only when no persistent data store exists.
 
 - **Maintainability:** schema changes, queries, generated types, policies, indexes, and data lifecycle rules have clear ownership and a usable local workflow.
-- **Modularity:** data access is localized behind appropriate seams; tenant, RLS, service-role, transaction, and domain boundaries do not leak into unrelated callers.
+- **Modularity:** data access is localized behind appropriate seams; tenant, row-security, privileged-client, transaction, and domain boundaries do not leak into unrelated callers.
 - **Predictability:** constraints, policies, transactions, idempotent/backward-compatible migrations, deterministic seeds, typed results, and guarded production workflows preserve invariants.
-- **Probe:** schema/migrations, Supabase clients and RLS policies, query sites, generated types, transactions, indexes, cascade behavior, seeds, migration CI, N+1 patterns, and environment protections.
+- **Probe:** schema/migrations, database clients and row-security policies (for example Supabase RLS), query sites, generated types, transactions, indexes, cascade behavior, seeds, migration CI, N+1 patterns, and environment protections.
 
 ### 5. Error Handling
 
@@ -110,9 +110,9 @@ Use the equivalent rubric for another database. Use `N/A` only when no persisten
 - **Predictability:** tool/runtime versions, lockfiles, environment validation, clean builds, caches, and release workflows produce reproducible results.
 - **Probe:** manifests, scripts, lockfiles, version managers, workspace/task config, environment schemas, generated artifacts, clean build behavior, dependency health, and setup docs.
 
-### 8. Frontend Performance
+### 8. Client Performance
 
-Use `N/A` when no frontend exists. Score evidence and safeguards, not speculative micro-optimizations.
+Apply this rubric to the user-facing client — web, mobile, or desktop. Use `N/A` when no user-facing client exists. Score evidence and safeguards, not speculative micro-optimizations.
 
 - **Maintainability:** performance-sensitive data, rendering, assets, and caching patterns are understandable and centralized rather than patched per component.
 - **Modularity:** client/server and async boundaries minimize shipped code, waterfalls, rerender coupling, global state, and oversized route/component dependencies.
